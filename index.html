@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEXUS INDIA | Liquidity Discovery</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { background: #020617; color: #f3f4f6; font-family: 'Rajdhani', sans-serif; }
+        .glass-asset { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 24px; }
+        .neo-input { background: rgba(0,0,0,0.6); border: 1px solid #1e293b; color: white; border-radius: 12px; transition: 0.3s; }
+        .neo-input:focus { border-color: #00f2ff; outline: none; box-shadow: 0 0 15px rgba(0, 242, 255, 0.2); }
+        .btn-sync { background: linear-gradient(135deg, #6366f1, #06b6d4); font-family: 'Orbitron', sans-serif; transition: 0.3s; letter-spacing: 1px; }
+        .btn-sync:hover { filter: brightness(1.2); transform: translateY(-1px); }
+        .shimmer { background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent); background-size: 200% 100%; animation: shimmer 2s infinite; }
+        @keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
+    </style>
+</head>
+<body class="p-6 md:p-12">
+
+    <header class="max-w-6xl mx-auto flex justify-between items-center mb-12">
+        <div>
+            <h1 class="text-2xl font-display font-bold uppercase tracking-tighter">Nexus<span class="text-cyan-400">Core</span></h1>
+            <p class="text-[10px] text-gray-500 font-bold tracking-widest uppercase">RBI AA-Compliant Discovery Engine</p>
+        </div>
+        <div id="sync_pill" class="glass-asset px-4 py-2 flex items-center gap-2 border-white/5">
+            <div class="w-2 h-2 bg-gray-500 rounded-full"></div>
+            <span class="text-[10px] font-bold text-gray-500 uppercase">Bank Nodes: Offline</span>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8">
+        
+        <aside class="space-y-6">
+            <div class="glass-asset p-8 border-t-2 border-cyan-500">
+                <h3 class="text-[10px] font-display mb-6 text-gray-500 tracking-widest uppercase">Find Liquid Cash</h3>
+                <div id="sync_container">
+                    <button onclick="simulateBankSync()" class="btn-sync w-full text-white py-4 rounded-xl text-[10px] font-bold uppercase">
+                        Fetch All Bank Balances
+                    </button>
+                </div>
+                <div id="bank_results" class="hidden mt-6 space-y-3"></div>
+            </div>
+
+            <div class="glass-asset p-8">
+                <h3 class="text-[10px] font-display mb-6 text-gray-500 tracking-widest uppercase">Manual Inputs</h3>
+                <div class="space-y-4">
+                    <div>
+                        <label class="text-[10px] font-bold text-gray-500 uppercase">Annual CTC (₹)</label>
+                        <input type="number" id="in_income" class="neo-input w-full p-3 mt-1" placeholder="e.g. 15,00,000">
+                    </div>
+                    <div>
+                        <label class="text-[10px] font-bold text-gray-500 uppercase">Monthly Expenses (₹)</label>
+                        <input type="number" id="in_burn" class="neo-input w-full p-3 mt-1" placeholder="e.g. 60,000">
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <section class="lg:col-span-2 space-y-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="glass-asset p-8">
+                    <h4 class="text-[10px] font-bold text-gray-500 uppercase mb-2">Total Liquid Cash</h4>
+                    <div class="flex items-baseline gap-2">
+                        <span class="text-2xl text-cyan-400 font-bold">₹</span>
+                        <span id="out_savings" class="text-5xl font-display text-white tracking-tighter">0</span>
+                    </div>
+                </div>
+
+                <div class="glass-asset p-8">
+                    <h4 class="text-[10px] font-bold text-gray-500 uppercase mb-2">2026 Tax Liability</h4>
+                    <div class="flex items-baseline gap-2">
+                        <span class="text-2xl text-indigo-400 font-bold">₹</span>
+                        <span id="out_tax" class="text-5xl font-display text-white tracking-tighter">0</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-asset p-8 min-h-[300px]">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-xs font-display text-cyan-400 tracking-widest uppercase">Strategy Report</h3>
+                    <div id="runway_badge" class="text-[10px] font-black px-3 py-1 bg-slate-900 rounded-full text-slate-500 uppercase">Wait for Sync</div>
+                </div>
+                <div id="report_content" class="text-sm text-gray-400 italic leading-relaxed">
+                    Awaiting data sync. Use the "Fetch" button to link your Indian bank accounts via the AA framework.
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        let discoveredSavings = 0;
+
+        function simulateBankSync() {
+            const container = document.getElementById('sync_container');
+            container.innerHTML = `<div class="p-4 glass-asset shimmer text-[10px] font-bold text-center uppercase text-cyan-400 border-cyan-500/20">Accessing RBI Gateway...</div>`;
+            
+            setTimeout(() => {
+                const otp = prompt("Account Aggregator: Enter 6-digit OTP sent to your linked mobile:");
+                if(otp) finalizeDiscovery();
+                else location.reload();
+            }, 800);
+        }
+
+        function finalizeDiscovery() {
+            const mockBanks = [
+                { name: "HDFC Savings", bal: 125400 },
+                { name: "ICICI Salary", bal: 48000 },
+                { name: "SBI Emergency", bal: 15200 }
+            ];
+
+            discoveredSavings = mockBanks.reduce((sum, b) => sum + b.bal, 0);
+            
+            // Update UI
+            document.getElementById('sync_container').innerHTML = `<div class="text-green-400 text-[10px] font-bold uppercase p-2">✓ Nodes Synchronized</div>`;
+            const results = document.getElementById('bank_results');
+            results.classList.remove('hidden');
+            results.innerHTML = mockBanks.map(b => `
+                <div class="flex justify-between text-[11px] bg-white/5 p-3 rounded-xl border border-white/5">
+                    <span class="text-gray-400">${b.name}</span>
+                    <span class="font-bold">₹${b.bal.toLocaleString('en-IN')}</span>
+                </div>
+            `).join('');
+
+            const pill = document.getElementById('sync_pill');
+            pill.querySelector('div').className = "w-2 h-2 bg-green-500 animate-pulse rounded-full";
+            pill.querySelector('span').innerText = "Bank Nodes: Active";
+            pill.querySelector('span').className = "text-[10px] font-bold text-green-500 uppercase";
+
+            calculateFinance();
+        }
+
+        function calculateFinance() {
+            const income = parseFloat(document.getElementById('in_income').value) || 0;
+            const burn = parseFloat(document.getElementById('in_burn').value) || 0;
+
+            // TAX CALC: NEW REGIME FY 2026-27 (INDIA)
+            // Effective zero tax up to ₹12.75L (Standard Deduction of ₹75,000 + ₹12L Rebate)
+            let taxable = Math.max(0, income - 75000);
+            let tax = 0;
+
+            if (taxable > 1200000) {
+                if (taxable > 400000) tax += Math.min(400000, taxable - 400000) * 0.05;
+                if (taxable > 800000) tax += Math.min(400000, taxable - 800000) * 0.10;
+                if (taxable > 1200000) tax += Math.min(400000, taxable - 1200000) * 0.15;
+                if (taxable > 1600000) tax += Math.min(400000, taxable - 1600000) * 0.20;
+                if (taxable > 2000000) tax += Math.min(400000, taxable - 2000000) * 0.25;
+                if (taxable > 2400000) tax += (taxable - 2400000) * 0.30;
+                tax = tax * 1.04; // Health & Edu Cess
+            }
+
+            document.getElementById('out_tax').innerText = tax.toLocaleString('en-IN', {maximumFractionDigits: 0});
+            document.getElementById('out_savings').innerText = discoveredSavings.toLocaleString('en-IN');
+
+            // Survival Logic
+            const runway = burn > 0 ? (discoveredSavings / burn).toFixed(1) : 0;
+            const badge = document.getElementById('runway_badge');
+            
+            if (runway < 3) {
+                badge.innerText = "CRITICAL RUNWAY"; badge.className = "text-[10px] font-black px-3 py-1 bg-red-500/10 text-red-500 rounded-full uppercase";
+            } else {
+                badge.innerText = "STABLE RUNWAY"; badge.className = "text-[10px] font-black px-3 py-1 bg-green-500/10 text-green-500 rounded-full uppercase";
+            }
+
+            // Advisory Report
+            document.getElementById('report_content').innerHTML = `
+                <div class="not-italic space-y-4 font-medium text-gray-300">
+                    <p><span class="text-cyan-400 font-bold">›</span> [DISCOVERY]: Found <b>₹${discoveredSavings.toLocaleString()}</b> across 3 bank nodes.</p>
+                    <p><span class="text-indigo-400 font-bold">›</span> [LIQUIDITY]: At current burn, your survival runway is <b>${runway} months</b>.</p>
+                    <p><span class="text-white font-bold">›</span> [ACTION]: ${discoveredSavings > (burn * 6) ? 'Excess cash detected. Park ₹'+(discoveredSavings - (burn*6)).toLocaleString()+' in a <b>Liquid Mutual Fund</b> to beat savings account rates.' : 'Priority: Save until you hit a 6-month buffer (₹'+(burn*6).toLocaleString()+').'}</p>
+                </div>
+            `;
+        }
+
+        // Auto-update when user types
+        document.getElementById('in_income').addEventListener('input', calculateFinance);
+        document.getElementById('in_burn').addEventListener('input', calculateFinance);
+    </script>
+</body>
+</html>
