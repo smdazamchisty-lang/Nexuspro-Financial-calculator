@@ -2,180 +2,166 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NEXUS INDIA | Liquidity Discovery</title>
+    <title>Nexus Bharat | Indian Survival Engine 2026</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
     <style>
-        body { background: #020617; color: #f3f4f6; font-family: 'Rajdhani', sans-serif; }
-        .glass-asset { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 24px; }
-        .neo-input { background: rgba(0,0,0,0.6); border: 1px solid #1e293b; color: white; border-radius: 12px; transition: 0.3s; }
-        .neo-input:focus { border-color: #00f2ff; outline: none; box-shadow: 0 0 15px rgba(0, 242, 255, 0.2); }
-        .btn-sync { background: linear-gradient(135deg, #6366f1, #06b6d4); font-family: 'Orbitron', sans-serif; transition: 0.3s; letter-spacing: 1px; }
-        .btn-sync:hover { filter: brightness(1.2); transform: translateY(-1px); }
-        .shimmer { background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent); background-size: 200% 100%; animation: shimmer 2s infinite; }
-        @keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
+        body { background: #010409; color: #e6edf3; font-family: 'Rajdhani', sans-serif; }
+        .india-glass { background: rgba(13, 17, 23, 0.8); border: 1px solid #30363d; border-radius: 16px; }
+        .crisis-border { border-top: 4px solid #ef4444 !important; background: linear-gradient(to bottom, #1a0505, #010409); }
+        .neo-input { background: #0d1117; border: 1px solid #30363d; color: white; padding: 10px; border-radius: 8px; width: 100%; }
+        .neo-input:focus { border-color: #58a6ff; outline: none; }
     </style>
 </head>
-<body class="p-6 md:p-12">
+<body class="p-4 md:p-8">
 
-    <header class="max-w-6xl mx-auto flex justify-between items-center mb-12">
-        <div>
-            <h1 class="text-2xl font-display font-bold uppercase tracking-tighter">Nexus<span class="text-cyan-400">Core</span></h1>
-            <p class="text-[10px] text-gray-500 font-bold tracking-widest uppercase">RBI AA-Compliant Discovery Engine</p>
+    <header class="max-w-5xl mx-auto flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 bg-orange-500 rounded-sm flex items-center justify-center font-bold text-white italic">B</div>
+            <div>
+                <h1 class="text-xl font-bold tracking-tight uppercase">Nexus<span id="header_title" class="text-emerald-500 ml-1">Bharat</span></h1>
+                <p class="text-[9px] text-gray-500 font-bold tracking-widest uppercase">RBI AA-Compliant Survival Logic</p>
+            </div>
         </div>
-        <div id="sync_pill" class="glass-asset px-4 py-2 flex items-center gap-2 border-white/5">
-            <div class="w-2 h-2 bg-gray-500 rounded-full"></div>
-            <span class="text-[10px] font-bold text-gray-500 uppercase">Bank Nodes: Offline</span>
+        <div class="flex items-center gap-4 india-glass px-5 py-2">
+            <span class="text-[10px] font-bold uppercase text-gray-400">War/Crisis Protocol</span>
+            <input type="checkbox" id="war_toggle" onchange="toggleWar()" class="w-10 h-5 bg-gray-700 rounded-full appearance-none checked:bg-red-600 cursor-pointer transition relative">
         </div>
     </header>
 
-    <main class="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8">
+    <main class="max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-6">
         
-        <aside class="space-y-6">
-            <div class="glass-asset p-8 border-t-2 border-cyan-500">
-                <h3 class="text-[10px] font-display mb-6 text-gray-500 tracking-widest uppercase">Find Liquid Cash</h3>
-                <div id="sync_container">
-                    <button onclick="simulateBankSync()" class="btn-sync w-full text-white py-4 rounded-xl text-[10px] font-bold uppercase">
-                        Fetch All Bank Balances
-                    </button>
-                </div>
-                <div id="bank_results" class="hidden mt-6 space-y-3"></div>
-            </div>
-
-            <div class="glass-asset p-8">
-                <h3 class="text-[10px] font-display mb-6 text-gray-500 tracking-widest uppercase">Manual Inputs</h3>
+        <aside class="lg:col-span-4 space-y-4">
+            <div id="input_card" class="india-glass p-6 border-t-4 border-emerald-500 transition-all">
+                <h3 class="text-xs font-bold text-gray-400 uppercase mb-5">Step 1: Discover Assets</h3>
                 <div class="space-y-4">
                     <div>
-                        <label class="text-[10px] font-bold text-gray-500 uppercase">Annual CTC (₹)</label>
-                        <input type="number" id="in_income" class="neo-input w-full p-3 mt-1" placeholder="e.g. 15,00,000">
+                        <label class="text-[10px] font-bold text-gray-500 uppercase">Monthly Essential Spend (₹)</label>
+                        <input type="number" id="in_burn" oninput="run()" class="neo-input" placeholder="e.g. 45000">
                     </div>
                     <div>
-                        <label class="text-[10px] font-bold text-gray-500 uppercase">Monthly Expenses (₹)</label>
-                        <input type="number" id="in_burn" class="neo-input w-full p-3 mt-1" placeholder="e.g. 60,000">
+                        <label class="text-[10px] font-bold text-gray-500 uppercase">Bank/UPI Balances (₹)</label>
+                        <input type="number" id="in_digital" oninput="run()" class="neo-input" placeholder="e.g. 500000">
+                    </div>
+                    <div>
+                        <label class="text-[10px] font-bold text-gray-500 uppercase">Physical Cash (Home) (₹)</label>
+                        <input type="number" id="in_hand" oninput="run()" class="neo-input" placeholder="e.g. 10000">
+                    </div>
+                    <div>
+                        <label class="text-[10px] font-bold text-gray-500 uppercase">Annual CTC (₹)</label>
+                        <input type="number" id="in_income" oninput="run()" class="neo-input" placeholder="e.g. 1500000">
                     </div>
                 </div>
             </div>
         </aside>
 
-        <section class="lg:col-span-2 space-y-8">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="glass-asset p-8">
-                    <h4 class="text-[10px] font-bold text-gray-500 uppercase mb-2">Total Liquid Cash</h4>
-                    <div class="flex items-baseline gap-2">
-                        <span class="text-2xl text-cyan-400 font-bold">₹</span>
-                        <span id="out_savings" class="text-5xl font-display text-white tracking-tighter">0</span>
+        <section class="lg:col-span-8 space-y-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="india-glass p-6">
+                    <h4 class="text-[10px] font-bold text-gray-500 uppercase">Survival Runway</h4>
+                    <div class="flex items-baseline gap-2 mt-1">
+                        <span id="out_runway" class="text-5xl font-bold text-white">0.0</span>
+                        <span class="text-[10px] font-bold text-gray-500 uppercase">Months</span>
+                    </div>
+                    <div class="w-full bg-gray-800 h-1 mt-4 rounded-full overflow-hidden">
+                        <div id="runway_bar" class="h-full bg-emerald-500 transition-all duration-700" style="width: 0%"></div>
                     </div>
                 </div>
-
-                <div class="glass-asset p-8">
-                    <h4 class="text-[10px] font-bold text-gray-500 uppercase mb-2">2026 Tax Liability</h4>
-                    <div class="flex items-baseline gap-2">
-                        <span class="text-2xl text-indigo-400 font-bold">₹</span>
-                        <span id="out_tax" class="text-5xl font-display text-white tracking-tighter">0</span>
+                <div class="india-glass p-6">
+                    <h4 class="text-[10px] font-bold text-gray-500 uppercase">Estimated Tax (2026)</h4>
+                    <div class="flex items-baseline gap-2 mt-1">
+                        <span class="text-2xl font-bold text-indigo-400">₹</span>
+                        <span id="out_tax" class="text-4xl font-bold text-white">0</span>
                     </div>
                 </div>
             </div>
 
-            <div class="glass-asset p-8 min-h-[300px]">
-                <div class="flex justify-between items-center mb-6">
-                    <h3 class="text-xs font-display text-cyan-400 tracking-widest uppercase">Strategy Report</h3>
-                    <div id="runway_badge" class="text-[10px] font-black px-3 py-1 bg-slate-900 rounded-full text-slate-500 uppercase">Wait for Sync</div>
+            <div class="india-glass p-8">
+                <div class="flex items-center justify-between mb-6">
+                    <h3 id="report_title" class="text-xs font-bold uppercase tracking-widest text-emerald-400">Tactical Wealth Report</h3>
+                    <span id="status_badge" class="text-[9px] font-black px-3 py-1 bg-gray-800 rounded text-gray-500">STANDBY</span>
                 </div>
-                <div id="report_content" class="text-sm text-gray-400 italic leading-relaxed">
-                    Awaiting data sync. Use the "Fetch" button to link your Indian bank accounts via the AA framework.
+                <div id="report_text" class="text-sm text-gray-400 leading-relaxed italic">
+                    Analyze your liquidity across digital and physical nodes to generate a roadmap.
+                </div>
+                
+                <div id="gold_section" class="hidden mt-6 pt-6 border-t border-gray-800">
+                    <div class="flex justify-between items-center">
+                        <span class="text-[10px] font-bold text-orange-400 uppercase">War-Time Barter Reserve</span>
+                        <span id="gold_val" class="text-xl font-bold text-white">0.0g Gold</span>
+                    </div>
                 </div>
             </div>
         </section>
     </main>
 
     <script>
-        let discoveredSavings = 0;
+        let isWar = false;
 
-        function simulateBankSync() {
-            const container = document.getElementById('sync_container');
-            container.innerHTML = `<div class="p-4 glass-asset shimmer text-[10px] font-bold text-center uppercase text-cyan-400 border-cyan-500/20">Accessing RBI Gateway...</div>`;
-            
-            setTimeout(() => {
-                const otp = prompt("Account Aggregator: Enter 6-digit OTP sent to your linked mobile:");
-                if(otp) finalizeDiscovery();
-                else location.reload();
-            }, 800);
+        function toggleWar() {
+            isWar = document.getElementById('war_toggle').checked;
+            const inputCard = document.getElementById('input_card');
+            const title = document.getElementById('header_title');
+            const reportTitle = document.getElementById('report_title');
+            const goldSec = document.getElementById('gold_section');
+
+            if(isWar) {
+                inputCard.classList.add('crisis-border');
+                title.innerText = "CRISIS"; title.className = "text-red-500 ml-1 animate-pulse";
+                reportTitle.className = "text-xs font-bold uppercase tracking-widest text-red-500";
+                goldSec.classList.remove('hidden');
+            } else {
+                inputCard.classList.remove('crisis-border');
+                title.innerText = "Bharat"; title.className = "text-emerald-500 ml-1";
+                reportTitle.className = "text-xs font-bold uppercase tracking-widest text-emerald-400";
+                goldSec.classList.add('hidden');
+            }
+            run();
         }
 
-        function finalizeDiscovery() {
-            const mockBanks = [
-                { name: "HDFC Savings", bal: 125400 },
-                { name: "ICICI Salary", bal: 48000 },
-                { name: "SBI Emergency", bal: 15200 }
-            ];
-
-            discoveredSavings = mockBanks.reduce((sum, b) => sum + b.bal, 0);
-            
-            // Update UI
-            document.getElementById('sync_container').innerHTML = `<div class="text-green-400 text-[10px] font-bold uppercase p-2">✓ Nodes Synchronized</div>`;
-            const results = document.getElementById('bank_results');
-            results.classList.remove('hidden');
-            results.innerHTML = mockBanks.map(b => `
-                <div class="flex justify-between text-[11px] bg-white/5 p-3 rounded-xl border border-white/5">
-                    <span class="text-gray-400">${b.name}</span>
-                    <span class="font-bold">₹${b.bal.toLocaleString('en-IN')}</span>
-                </div>
-            `).join('');
-
-            const pill = document.getElementById('sync_pill');
-            pill.querySelector('div').className = "w-2 h-2 bg-green-500 animate-pulse rounded-full";
-            pill.querySelector('span').innerText = "Bank Nodes: Active";
-            pill.querySelector('span').className = "text-[10px] font-bold text-green-500 uppercase";
-
-            calculateFinance();
-        }
-
-        function calculateFinance() {
-            const income = parseFloat(document.getElementById('in_income').value) || 0;
+        function run() {
             const burn = parseFloat(document.getElementById('in_burn').value) || 0;
+            const digital = parseFloat(document.getElementById('in_digital').value) || 0;
+            const hand = parseFloat(document.getElementById('in_hand').value) || 0;
+            const income = parseFloat(document.getElementById('in_income').value) || 0;
 
-            // TAX CALC: NEW REGIME FY 2026-27 (INDIA)
-            // Effective zero tax up to ₹12.75L (Standard Deduction of ₹75,000 + ₹12L Rebate)
+            const totalLiquid = digital + hand;
+            const runway = burn > 0 ? (totalLiquid / burn).toFixed(1) : 0;
+            
+            // Tax: India New Regime 2026 (75k Std Deduction + 12L zero-tax slab)
             let taxable = Math.max(0, income - 75000);
             let tax = 0;
-
-            if (taxable > 1200000) {
-                if (taxable > 400000) tax += Math.min(400000, taxable - 400000) * 0.05;
-                if (taxable > 800000) tax += Math.min(400000, taxable - 800000) * 0.10;
-                if (taxable > 1200000) tax += Math.min(400000, taxable - 1200000) * 0.15;
-                if (taxable > 1600000) tax += Math.min(400000, taxable - 1600000) * 0.20;
-                if (taxable > 2000000) tax += Math.min(400000, taxable - 2000000) * 0.25;
-                if (taxable > 2400000) tax += (taxable - 2400000) * 0.30;
-                tax = tax * 1.04; // Health & Edu Cess
+            if(taxable > 1200000) {
+                if(taxable > 400000) tax += Math.min(400000, taxable - 400000) * 0.05;
+                if(taxable > 800000) tax += Math.min(400000, taxable - 800000) * 0.10;
+                if(taxable > 1200000) tax += (taxable - 1200000) * 0.15;
+                tax *= 1.04;
             }
 
-            document.getElementById('out_tax').innerText = tax.toLocaleString('en-IN', {maximumFractionDigits: 0});
-            document.getElementById('out_savings').innerText = discoveredSavings.toLocaleString('en-IN');
-
-            // Survival Logic
-            const runway = burn > 0 ? (discoveredSavings / burn).toFixed(1) : 0;
-            const badge = document.getElementById('runway_badge');
+            document.getElementById('out_runway').innerText = runway;
+            document.getElementById('out_tax').innerText = Math.round(tax).toLocaleString('en-IN');
             
-            if (runway < 3) {
-                badge.innerText = "CRITICAL RUNWAY"; badge.className = "text-[10px] font-black px-3 py-1 bg-red-500/10 text-red-500 rounded-full uppercase";
-            } else {
-                badge.innerText = "STABLE RUNWAY"; badge.className = "text-[10px] font-black px-3 py-1 bg-green-500/10 text-green-500 rounded-full uppercase";
+            const bar = document.getElementById('runway_bar');
+            const target = isWar ? 12 : 6;
+            bar.style.width = Math.min((runway/target)*100, 100) + "%";
+            bar.style.backgroundColor = runway < target ? "#ef4444" : "#10b981";
+
+            const goldVal = isWar ? (totalLiquid * 0.12 / 8200).toFixed(1) : 0;
+            document.getElementById('gold_val').innerText = goldVal + "g Physical Gold";
+
+            const report = document.getElementById('report_text');
+            const badge = document.getElementById('status_badge');
+
+            if(totalLiquid > 0) {
+                if(isWar) {
+                    badge.innerText = "HIGH RISK"; badge.className = "text-[9px] font-black px-3 py-1 bg-red-900/30 rounded text-red-500";
+                    report.innerHTML = `<b>Tactical Directive:</b> Your physical cash on hand covers only ${(hand/burn).toFixed(1)} months. In war circumstances, UPI/Digital nodes may fail. <b>Action:</b> Withdraw ₹${Math.max(0, (burn*3)-hand).toLocaleString()} as physical notes and convert surplus into ${goldVal}g of gold coins for barter.`;
+                } else {
+                    badge.innerText = "NORMAL"; badge.className = "text-[9px] font-black px-3 py-1 bg-emerald-900/30 rounded text-emerald-500";
+                    report.innerHTML = `<b>Market Directive:</b> Your liquidity is stable. Keep 1 month of burn in Savings for UPI. Move the investable surplus of ₹${Math.max(0, digital-burn).toLocaleString()} to a <b>Liquid Fund</b> (e.g., HDFC or ICICI Liquid) for 6.7% annualized returns.`;
+                }
             }
-
-            // Advisory Report
-            document.getElementById('report_content').innerHTML = `
-                <div class="not-italic space-y-4 font-medium text-gray-300">
-                    <p><span class="text-cyan-400 font-bold">›</span> [DISCOVERY]: Found <b>₹${discoveredSavings.toLocaleString()}</b> across 3 bank nodes.</p>
-                    <p><span class="text-indigo-400 font-bold">›</span> [LIQUIDITY]: At current burn, your survival runway is <b>${runway} months</b>.</p>
-                    <p><span class="text-white font-bold">›</span> [ACTION]: ${discoveredSavings > (burn * 6) ? 'Excess cash detected. Park ₹'+(discoveredSavings - (burn*6)).toLocaleString()+' in a <b>Liquid Mutual Fund</b> to beat savings account rates.' : 'Priority: Save until you hit a 6-month buffer (₹'+(burn*6).toLocaleString()+').'}</p>
-                </div>
-            `;
         }
-
-        // Auto-update when user types
-        document.getElementById('in_income').addEventListener('input', calculateFinance);
-        document.getElementById('in_burn').addEventListener('input', calculateFinance);
     </script>
 </body>
 </html>
