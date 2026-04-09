@@ -2,163 +2,225 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Nexus Bharat | Indian Survival Engine 2026</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEXUS BHARAT | The Sentinel</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;900&family=Rajdhani:wght@300;500;700&display=swap" rel="stylesheet">
     <style>
-        body { background: #010409; color: #e6edf3; font-family: 'Rajdhani', sans-serif; }
-        .india-glass { background: rgba(13, 17, 23, 0.8); border: 1px solid #30363d; border-radius: 16px; }
-        .crisis-border { border-top: 4px solid #ef4444 !important; background: linear-gradient(to bottom, #1a0505, #010409); }
-        .neo-input { background: #0d1117; border: 1px solid #30363d; color: white; padding: 10px; border-radius: 8px; width: 100%; }
-        .neo-input:focus { border-color: #58a6ff; outline: none; }
+        :root { --neon: #00f2ff; --war: #ff4d4d; --gold: #f59e0b; }
+        body { background: #000; color: #fff; font-family: 'Rajdhani', sans-serif; overflow-x: hidden; scroll-behavior: smooth; }
+        .font-display { font-family: 'Orbitron', sans-serif; }
+        
+        /* High-Fidelity Backgrounds */
+        .hero-bg { background: radial-gradient(circle at 50% -20%, #1e293b 0%, #000 80%); }
+        .glass { background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.1); backdrop-filter: blur(15px); border-radius: 24px; }
+        
+        /* Animations */
+        @keyframes scan { 0% { top: -10%; } 100% { top: 110%; } }
+        .scanline { width: 100%; height: 4px; background: linear-gradient(to right, transparent, var(--neon), transparent); position: absolute; animation: scan 6s linear infinite; opacity: 0.2; }
+        
+        .pulse-red { animation: pulseRed 2s infinite; }
+        @keyframes pulseRed { 0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); } 70% { box-shadow: 0 0 0 20px rgba(239, 68, 68, 0); } 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); } }
+
+        /* Custom Inputs */
+        .neo-input { background: rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.1); color: #fff; padding: 16px; border-radius: 12px; transition: 0.4s; }
+        .neo-input:focus { border-color: var(--neon); outline: none; box-shadow: 0 0 20px rgba(0, 242, 255, 0.15); }
+        
+        .tab-transition { transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
     </style>
 </head>
-<body class="p-4 md:p-8">
+<body class="hero-bg">
 
-    <header class="max-w-5xl mx-auto flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
-        <div class="flex items-center gap-3">
-            <div class="w-10 h-10 bg-orange-500 rounded-sm flex items-center justify-center font-bold text-white italic">B</div>
-            <div>
-                <h1 class="text-xl font-bold tracking-tight uppercase">Nexus<span id="header_title" class="text-emerald-500 ml-1">Bharat</span></h1>
-                <p class="text-[9px] text-gray-500 font-bold tracking-widest uppercase">RBI AA-Compliant Survival Logic</p>
-            </div>
-        </div>
-        <div class="flex items-center gap-4 india-glass px-5 py-2">
-            <span class="text-[10px] font-bold uppercase text-gray-400">War/Crisis Protocol</span>
-            <input type="checkbox" id="war_toggle" onchange="toggleWar()" class="w-10 h-5 bg-gray-700 rounded-full appearance-none checked:bg-red-600 cursor-pointer transition relative">
-        </div>
-    </header>
-
-    <main class="max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-6">
+    <section id="landing" class="min-h-screen flex flex-col items-center justify-center relative p-6">
+        <div class="scanline"></div>
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-cyan-500/10 rounded-full blur-[120px] -z-10"></div>
         
-        <aside class="lg:col-span-4 space-y-4">
-            <div id="input_card" class="india-glass p-6 border-t-4 border-emerald-500 transition-all">
-                <h3 class="text-xs font-bold text-gray-400 uppercase mb-5">Step 1: Discover Assets</h3>
-                <div class="space-y-4">
-                    <div>
-                        <label class="text-[10px] font-bold text-gray-500 uppercase">Monthly Essential Spend (₹)</label>
-                        <input type="number" id="in_burn" oninput="run()" class="neo-input" placeholder="e.g. 45000">
-                    </div>
-                    <div>
-                        <label class="text-[10px] font-bold text-gray-500 uppercase">Bank/UPI Balances (₹)</label>
-                        <input type="number" id="in_digital" oninput="run()" class="neo-input" placeholder="e.g. 500000">
-                    </div>
-                    <div>
-                        <label class="text-[10px] font-bold text-gray-500 uppercase">Physical Cash (Home) (₹)</label>
-                        <input type="number" id="in_hand" oninput="run()" class="neo-input" placeholder="e.g. 10000">
-                    </div>
-                    <div>
-                        <label class="text-[10px] font-bold text-gray-500 uppercase">Annual CTC (₹)</label>
-                        <input type="number" id="in_income" oninput="run()" class="neo-input" placeholder="e.g. 1500000">
-                    </div>
-                </div>
+        <div class="text-center space-y-8 max-w-4xl">
+            <div class="inline-block px-4 py-1 border border-cyan-500/30 rounded-full bg-cyan-500/5">
+                <span class="text-[10px] font-bold tracking-[0.6em] text-cyan-400 uppercase">System Integrity: Nominal</span>
             </div>
-        </aside>
+            
+            <h1 class="text-6xl md:text-9xl font-display font-black tracking-tighter italic">
+                NEXUS<span class="text-cyan-400">BHARAT</span>
+            </h1>
+            
+            <p class="text-gray-400 text-sm md:text-lg tracking-[0.2em] font-light max-w-2xl mx-auto uppercase">
+                AI Liquidity Sentinel for <span class="text-white font-bold">Resilient Wealth</span> in the 2026 Indian Landscape.
+            </p>
 
-        <section class="lg:col-span-8 space-y-6">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div class="india-glass p-6">
-                    <h4 class="text-[10px] font-bold text-gray-500 uppercase">Survival Runway</h4>
-                    <div class="flex items-baseline gap-2 mt-1">
-                        <span id="out_runway" class="text-5xl font-bold text-white">0.0</span>
-                        <span class="text-[10px] font-bold text-gray-500 uppercase">Months</span>
-                    </div>
-                    <div class="w-full bg-gray-800 h-1 mt-4 rounded-full overflow-hidden">
-                        <div id="runway_bar" class="h-full bg-emerald-500 transition-all duration-700" style="width: 0%"></div>
-                    </div>
-                </div>
-                <div class="india-glass p-6">
-                    <h4 class="text-[10px] font-bold text-gray-500 uppercase">Estimated Tax (2026)</h4>
-                    <div class="flex items-baseline gap-2 mt-1">
-                        <span class="text-2xl font-bold text-indigo-400">₹</span>
-                        <span id="out_tax" class="text-4xl font-bold text-white">0</span>
-                    </div>
-                </div>
-            </div>
+            <button onclick="scrollToCalc()" class="group relative px-12 py-5 font-display text-sm font-black uppercase tracking-widest border border-cyan-400 text-cyan-400 hover:bg-cyan-400 hover:text-black transition-all duration-500">
+                Initialize Tactical Hub
+                <span class="absolute -top-1 -right-1 w-2 h-2 bg-white"></span>
+                <span class="absolute -bottom-1 -left-1 w-2 h-2 bg-white"></span>
+            </button>
+        </div>
+    </section>
 
-            <div class="india-glass p-8">
-                <div class="flex items-center justify-between mb-6">
-                    <h3 id="report_title" class="text-xs font-bold uppercase tracking-widest text-emerald-400">Tactical Wealth Report</h3>
-                    <span id="status_badge" class="text-[9px] font-black px-3 py-1 bg-gray-800 rounded text-gray-500">STANDBY</span>
-                </div>
-                <div id="report_text" class="text-sm text-gray-400 leading-relaxed italic">
-                    Analyze your liquidity across digital and physical nodes to generate a roadmap.
+    <section id="calculator" class="min-h-screen p-6 md:p-16 border-t border-white/5 bg-[#010409]">
+        <div class="max-w-7xl mx-auto">
+            
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-16 gap-8">
+                <div>
+                    <h2 class="text-4xl font-display font-bold uppercase italic">Tactical <span class="text-cyan-400">Analysis</span></h2>
+                    <p class="text-xs text-gray-500 font-bold tracking-[0.4em] uppercase mt-2">Operational Node: Bangalore // 2026.Q2</p>
                 </div>
                 
-                <div id="gold_section" class="hidden mt-6 pt-6 border-t border-gray-800">
-                    <div class="flex justify-between items-center">
-                        <span class="text-[10px] font-bold text-orange-400 uppercase">War-Time Barter Reserve</span>
-                        <span id="gold_val" class="text-xl font-bold text-white">0.0g Gold</span>
+                <div class="glass p-5 flex items-center gap-6 border-white/5">
+                    <div class="text-right">
+                        <p id="mode-text" class="text-xs font-black text-cyan-400 uppercase tracking-widest">Market Standard</p>
+                        <p class="text-[9px] text-gray-500 uppercase font-bold">Survival Protocol Alpha</p>
                     </div>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" id="crisis-toggle" onchange="runCrisisLogic()" class="sr-only peer">
+                        <div class="w-14 h-7 bg-slate-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-red-600"></div>
+                    </label>
                 </div>
             </div>
-        </section>
-    </main>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
+                
+                <div class="lg:col-span-4 space-y-6">
+                    <div id="input-card" class="glass p-8 border-t-2 border-cyan-500 tab-transition">
+                        <h3 class="text-[10px] font-black text-gray-400 uppercase tracking-[0.3em] mb-8">Data Ingestion</h3>
+                        <div class="space-y-6">
+                            <div>
+                                <label class="text-[10px] font-bold text-gray-500 uppercase mb-2 block">Monthly Outflow (₹)</label>
+                                <input type="number" id="in-spend" oninput="analyze()" class="neo-input w-full" placeholder="60,000">
+                            </div>
+                            <div>
+                                <label class="text-[10px] font-bold text-gray-500 uppercase mb-2 block">Digital Liquidity (₹)</label>
+                                <input type="number" id="in-digital" oninput="analyze()" class="neo-input w-full" placeholder="2,50,000">
+                            </div>
+                            <div>
+                                <label class="text-[10px] font-bold text-gray-500 uppercase mb-2 block">Physical Cash (₹)</label>
+                                <input type="number" id="in-physical" oninput="analyze()" class="neo-input w-full" placeholder="15,000">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-8 space-y-8">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="glass p-8 relative overflow-hidden">
+                            <h4 class="text-[10px] font-black text-gray-500 uppercase tracking-widest">Survival Runway</h4>
+                            <div class="flex items-baseline gap-3 mt-4">
+                                <span id="out-runway" class="text-7xl font-display font-black">0.0</span>
+                                <span class="text-sm font-bold text-gray-500 uppercase">Months</span>
+                            </div>
+                            <div class="w-full bg-white/5 h-2 mt-8 rounded-full overflow-hidden">
+                                <div id="bar-runway" class="h-full bg-cyan-400 tab-transition" style="width: 0%"></div>
+                            </div>
+                        </div>
+
+                        <div id="gold-card" class="glass p-8 border-white/5 opacity-30 transition-all duration-700">
+                            <h4 class="text-[10px] font-black text-amber-500/70 uppercase tracking-widest">Barter Hedge</h4>
+                            <div class="mt-4">
+                                <span id="out-gold" class="text-4xl font-display font-black text-amber-500">0.0g</span>
+                                <span class="text-xs font-bold text-amber-600 block mt-1 uppercase">Physical Gold Reserve</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="glass p-10 min-h-[300px] border-white/5 relative bg-gradient-to-br from-white/[0.01] to-transparent">
+                        <div class="flex items-center gap-4 mb-8">
+                            <div id="status-light" class="w-3 h-3 rounded-full bg-slate-700 shadow-[0_0_15px_rgba(0,0,0,0.5)]"></div>
+                            <h3 id="report-title" class="text-xs font-black uppercase tracking-[0.4em] text-cyan-400">Sentinel Intelligence Report</h3>
+                        </div>
+                        
+                        <div id="report-text" class="text-lg text-gray-400 leading-relaxed font-light italic">
+                            Awaiting financial uplink... Provide expenditure metrics to begin simulation.
+                        </div>
+
+                        <div id="action-footer" class="mt-12 pt-8 border-t border-white/5 hidden">
+                            <div class="flex flex-wrap gap-4">
+                                <div class="px-4 py-2 bg-cyan-500/10 border border-cyan-500/20 rounded text-[10px] font-bold uppercase text-cyan-400">Tax Compliant (2026)</div>
+                                <div class="px-4 py-2 bg-amber-500/10 border border-amber-500/20 rounded text-[10px] font-bold uppercase text-amber-400">Liquidity Focused</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
 
     <script>
-        let isWar = false;
-
-        function toggleWar() {
-            isWar = document.getElementById('war_toggle').checked;
-            const inputCard = document.getElementById('input_card');
-            const title = document.getElementById('header_title');
-            const reportTitle = document.getElementById('report_title');
-            const goldSec = document.getElementById('gold_section');
-
-            if(isWar) {
-                inputCard.classList.add('crisis-border');
-                title.innerText = "CRISIS"; title.className = "text-red-500 ml-1 animate-pulse";
-                reportTitle.className = "text-xs font-bold uppercase tracking-widest text-red-500";
-                goldSec.classList.remove('hidden');
-            } else {
-                inputCard.classList.remove('crisis-border');
-                title.innerText = "Bharat"; title.className = "text-emerald-500 ml-1";
-                reportTitle.className = "text-xs font-bold uppercase tracking-widest text-emerald-400";
-                goldSec.classList.add('hidden');
-            }
-            run();
+        function scrollToCalc() {
+            document.getElementById('calculator').scrollIntoView({ behavior: 'smooth' });
         }
 
-        function run() {
-            const burn = parseFloat(document.getElementById('in_burn').value) || 0;
-            const digital = parseFloat(document.getElementById('in_digital').value) || 0;
-            const hand = parseFloat(document.getElementById('in_hand').value) || 0;
-            const income = parseFloat(document.getElementById('in_income').value) || 0;
+        let isCrisis = false;
 
-            const totalLiquid = digital + hand;
-            const runway = burn > 0 ? (totalLiquid / burn).toFixed(1) : 0;
+        function runCrisisLogic() {
+            isCrisis = document.getElementById('crisis-toggle').checked;
+            const card = document.getElementById('input-card');
+            const goldCard = document.getElementById('gold-card');
+            const modeText = document.getElementById('mode-text');
+            const title = document.getElementById('report-title');
             
-            // Tax: India New Regime 2026 (75k Std Deduction + 12L zero-tax slab)
-            let taxable = Math.max(0, income - 75000);
-            let tax = 0;
-            if(taxable > 1200000) {
-                if(taxable > 400000) tax += Math.min(400000, taxable - 400000) * 0.05;
-                if(taxable > 800000) tax += Math.min(400000, taxable - 800000) * 0.10;
-                if(taxable > 1200000) tax += (taxable - 1200000) * 0.15;
-                tax *= 1.04;
+            if(isCrisis) {
+                card.classList.remove('border-cyan-500');
+                card.classList.add('border-red-600', 'pulse-red');
+                goldCard.classList.remove('opacity-30');
+                goldCard.classList.add('opacity-100', 'border-amber-500/30');
+                modeText.innerText = "CRISIS PROTOCOL";
+                modeText.className = "text-xs font-black text-red-500 uppercase tracking-widest animate-pulse";
+                title.className = "text-xs font-black uppercase tracking-[0.4em] text-red-500";
+            } else {
+                card.classList.remove('border-red-600', 'pulse-red');
+                card.classList.add('border-cyan-500');
+                goldCard.classList.add('opacity-30');
+                goldCard.classList.remove('opacity-100', 'border-amber-500/30');
+                modeText.innerText = "Market Standard";
+                modeText.className = "text-xs font-black text-cyan-400 uppercase tracking-widest";
+                title.className = "text-xs font-black uppercase tracking-[0.4em] text-cyan-400";
             }
+            analyze();
+        }
 
-            document.getElementById('out_runway').innerText = runway;
-            document.getElementById('out_tax').innerText = Math.round(tax).toLocaleString('en-IN');
+        function analyze() {
+            const spend = parseFloat(document.getElementById('in-spend').value) || 0;
+            const digital = parseFloat(document.getElementById('in-digital').value) || 0;
+            const physical = parseFloat(document.getElementById('in-physical').value) || 0;
+            const total = digital + physical;
             
-            const bar = document.getElementById('runway_bar');
-            const target = isWar ? 12 : 6;
-            bar.style.width = Math.min((runway/target)*100, 100) + "%";
-            bar.style.backgroundColor = runway < target ? "#ef4444" : "#10b981";
+            // AI Simulation Logic: Crisis reduces spend to 70% (essentials only)
+            const burn = isCrisis ? (spend * 0.7) : spend;
+            const runway = burn > 0 ? (total / burn).toFixed(1) : 0;
+            
+            document.getElementById('out-runway').innerText = runway;
+            const bar = document.getElementById('bar-runway');
+            const target = isCrisis ? 12 : 6;
+            
+            bar.style.width = Math.min((runway / target) * 100, 100) + "%";
+            bar.style.background = runway < target ? "#ef4444" : "#22d3ee";
 
-            const goldVal = isWar ? (totalLiquid * 0.12 / 8200).toFixed(1) : 0;
-            document.getElementById('gold_val').innerText = goldVal + "g Physical Gold";
+            // Physical Gold Math (15% Hedge for War)
+            const gold = isCrisis ? (total * 0.15 / 8400).toFixed(1) : 0;
+            document.getElementById('out-gold').innerText = gold + "g";
 
-            const report = document.getElementById('report_text');
-            const badge = document.getElementById('status_badge');
+            const report = document.getElementById('report-text');
+            const light = document.getElementById('status-light');
+            const footer = document.getElementById('action-footer');
 
-            if(totalLiquid > 0) {
-                if(isWar) {
-                    badge.innerText = "HIGH RISK"; badge.className = "text-[9px] font-black px-3 py-1 bg-red-900/30 rounded text-red-500";
-                    report.innerHTML = `<b>Tactical Directive:</b> Your physical cash on hand covers only ${(hand/burn).toFixed(1)} months. In war circumstances, UPI/Digital nodes may fail. <b>Action:</b> Withdraw ₹${Math.max(0, (burn*3)-hand).toLocaleString()} as physical notes and convert surplus into ${goldVal}g of gold coins for barter.`;
+            if(total > 0) {
+                footer.classList.remove('hidden');
+                if(isCrisis) {
+                    light.className = "w-3 h-3 rounded-full bg-red-600 pulse-red";
+                    report.innerHTML = `
+                        <div class="space-y-4 not-italic">
+                            <p class="text-red-100 font-bold tracking-tight text-2xl">⚠️ SYSTEM ALERT: DIGITAL FRAGILITY</p>
+                            <p class="text-gray-400 text-base">UPI and Net Banking systems are compromised in simulation. Your physical cash (₹${physical.toLocaleString('en-IN')}) provides only <b>${(physical/burn).toFixed(1)} months</b> of autonomy.</p>
+                            <p class="text-white text-base border-l-2 border-red-600 pl-4"><b>STRATEGIC MOVE:</b> Withdraw ₹${Math.max(0, (burn*3)-physical).toLocaleString('en-IN')} as physical notes. Allocate surplus into physical assets (${gold}g gold) for barter-level trade.</p>
+                        </div>`;
                 } else {
-                    badge.innerText = "NORMAL"; badge.className = "text-[9px] font-black px-3 py-1 bg-emerald-900/30 rounded text-emerald-500";
-                    report.innerHTML = `<b>Market Directive:</b> Your liquidity is stable. Keep 1 month of burn in Savings for UPI. Move the investable surplus of ₹${Math.max(0, digital-burn).toLocaleString()} to a <b>Liquid Fund</b> (e.g., HDFC or ICICI Liquid) for 6.7% annualized returns.`;
+                    light.className = "w-3 h-3 rounded-full bg-emerald-500 shadow-[0_0_15px_#10b981]";
+                    report.innerHTML = `
+                        <div class="space-y-4 not-italic">
+                            <p class="text-cyan-400 font-bold tracking-tight text-2xl">OPTIMIZED FOR GROWTH</p>
+                            <p class="text-gray-400 text-base">Your current runway is <b>${runway} months</b>. Capital efficiency is prioritized. Digital nodes are stable.</p>
+                            <p class="text-white text-base border-l-2 border-cyan-400 pl-4"><b>STRATEGIC MOVE:</b> Maintain ₹${Math.round(spend*1.5).toLocaleString('en-IN')} in bank for UPI/EMI. Move ₹${Math.max(0, digital-(spend*1.5)).toLocaleString('en-IN')} to a <b>Liquid Arbitrage Fund</b> for 6.8% yields.</p>
+                        </div>`;
                 }
             }
         }
